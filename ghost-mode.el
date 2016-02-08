@@ -17,5 +17,7 @@
 (require 'url)
 (require 'json)
 
+(defvar ghost-mode-url nil)
+(defvar ghost-mode-bearer-token nil)
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

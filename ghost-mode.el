@@ -32,9 +32,7 @@
   (let ((url-request-method "GET")
         (url-request-extra-headers
          `(("Authorization" . ,ghost-mode-bearer-token))))
-
-        (url-retrieve ghost-mode-url 'ghost-mode-get-posts))
-  )
+    (url-retrieve ghost-mode-url 'ghost-mode-get-posts)))
 
 (defun ghost-mode-get-posts (status)
     ""
@@ -45,18 +43,54 @@
     (let* ((json-object-type 'hash-table)
 	  (body (json-read-from-string (buffer-string)))
 	  (posts (gethash "posts" body)))
+
+      (defun ghost-show-post (button)
+	(let (id (car (split-string (button-label button))))
+	  (message (button-label button))
+          (ghost-mode-show-post id)))
+
+      (define-button-type 'ghost-show-post-button
+	'action 'ghost-show-post
+	'follow-link t
+	'help-echo "Show post")
+
       (delete-region (point-min) (point-max))
-      (insert "Ghost mode - Articles")
-      (newline)
+
+      (insert "Ghost mode - Posts\n\n")
 
       (dotimes (i (length posts))
-	(insert (format "%d %s - %s"
+
+	(insert-text-button (format "%d %s - %s\n\n"
           (gethash "id" (aref posts i))
           (gethash "created_at" (aref posts i))
-          (gethash "slug" (aref posts i))
-	))
-	(newline)
+          (gethash "title" (aref posts i)))
+	  :type 'ghost-show-post-button)
       )))
+
+(defun ghost-mode-show-post (id)
+  "Yes"
+  (let ((url-request-method "GET")
+        (url-request-extra-headers
+         `(("Authorization" . ,ghost-mode-bearer-token))))
+    (url-retrieve (concat ghost-mode-url "/" id) 'ghost-mode-get-post)))
+
+(defun ghost-mode-get-post (status)
+    ""
+    (switch-to-buffer (current-buffer))
+    (search-forward "\n\n")
+    (delete-region (point-min) (point))
+
+    (let* ((json-object-type 'hash-table)
+	  (body (json-read-from-string (buffer-string)))
+	  (posts (gethash "posts" body)))
+
+      (delete-region (point-min) (point-max))
+
+      (insert (format "%s\n\n%s"
+	(gethash "title" (aref posts 0))
+	(gethash "markdown" (aref posts 0))))
+      ))
+
 
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

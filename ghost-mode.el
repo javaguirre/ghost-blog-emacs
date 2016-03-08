@@ -50,16 +50,13 @@
       (newline)
 
       (dotimes (i (length posts))
-	(insert (gethash "title" (aref posts i)))
-	(define-button-type 'link)
+	(insert (format "%d %s - %s"
+          (gethash "id" (aref posts i))
+          (gethash "created_at" (aref posts i))
+          (gethash "slug" (aref posts i))
+	))
 	(newline)
-	(insert (gethash "id" (aref posts i)))
-	(newline)
-	(insert (gethash "slug" (aref posts i)))
-	(newline)
-	(insert (gethash "created_at" (aref posts i)))
-	(newline)
-	)))
+      )))
 
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

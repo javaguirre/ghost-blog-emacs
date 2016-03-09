@@ -43,12 +43,6 @@
     (delete-region (point-min) (point))
 
     (let ((posts (ghost-mode--get-response-posts)))
-	(defun ghost-show-post (button)
-	 "Show a post by id from BUTTON."
-  	  (let (id (car (split-string (button-label button))))
-	    (message (button-label button))
-            (ghost-mode--connection (concat "/posts" id) 'ghost-mode--get-post-callback)))
-
       (define-button-type 'ghost-show-post-button
 	'action 'ghost-show-post
 	'follow-link t
@@ -79,6 +73,12 @@
 	(gethash "title" (aref posts 0))
 	(gethash "markdown" (aref posts 0))))
       ))
+
+(defun ghost-mode--show-post-action (button)
+  "Show a post by id from BUTTON."
+  (let (id (car (split-string (button-label button))))
+    (message (button-label button))
+    (ghost-mode--connection (concat "/posts" id) 'ghost-mode--get-post-callback)))
 
 (defun ghost-mode--go-to-body ()
   "Go to HTTP response body."

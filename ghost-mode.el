@@ -10,8 +10,6 @@
 
 ;;; Commentary:
 
-;; TODO Make It clickable
-;; TODO GEt the post on click
 ;; TODO EDIT and save!
 ;; TODO Set buffer read only
 ;;
@@ -26,15 +24,19 @@
 (defvar ghost-mode-bearer-token nil)
 
 ;;;###autoload
-(defun ghost-mode-connection ()
-  "Connection"
+(defun ghost-mode-get-posts ()
+  "Get posts from ghost."
   (interactive)
+  (ghost-mode-connection "/posts" 'ghost-mode-get-posts-callback))
+
+(defun ghost-mode-connection (endpoint callback &optional method data)
+  "Connection"
   (let ((url-request-method "GET")
         (url-request-extra-headers
          `(("Authorization" . ,ghost-mode-bearer-token))))
-    (url-retrieve ghost-mode-url 'ghost-mode-get-posts)))
+    (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
-(defun ghost-mode-get-posts (status)
+(defun ghost-mode-get-posts-callback (status)
     ""
     (switch-to-buffer-other-window (current-buffer))
     (search-forward "\n\n")
@@ -44,10 +46,11 @@
 	  (body (json-read-from-string (buffer-string)))
 	  (posts (gethash "posts" body)))
 
-      (defun ghost-show-post (button)
-	(let (id (car (split-string (button-label button))))
-	  (message (button-label button))
-          (ghost-mode-show-post id)))
+	(defun ghost-show-post (button)
+	 "Show a post by id from BUTTON."
+  	  (let (id (car (split-string (button-label button))))
+	    (message (button-label button))
+            (ghost-mode-connection (concat "/posts" id) 'ghost-mode-get-post-callback)))
 
       (define-button-type 'ghost-show-post-button
 	'action 'ghost-show-post
@@ -67,14 +70,7 @@
 	  :type 'ghost-show-post-button)
       )))
 
-(defun ghost-mode-show-post (id)
-  "Yes"
-  (let ((url-request-method "GET")
-        (url-request-extra-headers
-         `(("Authorization" . ,ghost-mode-bearer-token))))
-    (url-retrieve (concat ghost-mode-url "/" id) 'ghost-mode-get-post)))
-
-(defun ghost-mode-get-post (status)
+(defun ghost-mode-get-post-callback (status)
     ""
     (switch-to-buffer (current-buffer))
     (search-forward "\n\n")
@@ -90,7 +86,6 @@
 	(gethash "title" (aref posts 0))
 	(gethash "markdown" (aref posts 0))))
       ))
-
 
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

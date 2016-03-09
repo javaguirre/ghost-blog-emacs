@@ -27,30 +27,27 @@
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)
-  (ghost-mode-connection "/posts" 'ghost-mode-get-posts-callback))
+  (ghost-mode--connection "/posts" 'ghost-mode--get-posts-callback))
 
-(defun ghost-mode-connection (endpoint callback &optional method data)
+(defun ghost-mode--connection (endpoint callback &optional method data)
   "Connection"
   (let ((url-request-method "GET")
         (url-request-extra-headers
          `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
-(defun ghost-mode-get-posts-callback (status)
+(defun ghost-mode--get-posts-callback (status)
     ""
     (switch-to-buffer-other-window (current-buffer))
     (search-forward "\n\n")
     (delete-region (point-min) (point))
 
-    (let* ((json-object-type 'hash-table)
-	  (body (json-read-from-string (buffer-string)))
-	  (posts (gethash "posts" body)))
-
+    (let ((posts (ghost-mode--get-response-posts)))
 	(defun ghost-show-post (button)
 	 "Show a post by id from BUTTON."
   	  (let (id (car (split-string (button-label button))))
 	    (message (button-label button))
-            (ghost-mode-connection (concat "/posts" id) 'ghost-mode-get-post-callback)))
+            (ghost-mode--connection (concat "/posts" id) 'ghost-mode--get-post-callback)))
 
       (define-button-type 'ghost-show-post-button
 	'action 'ghost-show-post
@@ -70,15 +67,11 @@
 	  :type 'ghost-show-post-button)
       )))
 
-(defun ghost-mode-get-post-callback (status)
+(defun ghost-mode--get-post-callback (status)
     ""
-    (switch-to-buffer (current-buffer))
-    (search-forward "\n\n")
-    (delete-region (point-min) (point))
+    (ghost-mode--go-to-body)
 
-    (let* ((json-object-type 'hash-table)
-	  (body (json-read-from-string (buffer-string)))
-	  (posts (gethash "posts" body)))
+    (let ((posts (ghost-mode--get-response-posts)))
 
       (delete-region (point-min) (point-max))
 
@@ -86,6 +79,22 @@
 	(gethash "title" (aref posts 0))
 	(gethash "markdown" (aref posts 0))))
       ))
+
+(defun ghost-mode--go-to-body ()
+  "Go to HTTP response body."
+  (switch-to-buffer (current-buffer))
+  (search-forward "\n\n")
+  (delete-region (point-min) (point)))
+
+(defun ghost-mode--get-response-posts ()
+  ""
+  (let ((body (ghost-mode--get-response-body)))
+    (gethash "posts" body)))
+
+(defun ghost-mode--get-response-body ()
+  ""
+  (let ((json-object-type 'hash-table))
+    (json-read-from-string (buffer-string))))
 
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

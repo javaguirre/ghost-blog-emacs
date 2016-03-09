@@ -4,7 +4,7 @@
 ;; Author: Javier Aguirre <hello@javaguirre.net>
 ;; Maintainer: Javier Aguirre <hello@javaguirre.net>
 ;; Created: 10 Feb 2016
-;; Keywords: ghost
+;; Keywords: ghost, blog
 
 ;; This file is not part of GNU Emacs.
 

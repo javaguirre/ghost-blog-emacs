@@ -30,14 +30,14 @@
   (ghost-mode--connection "/posts" 'ghost-mode--get-posts-callback))
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
-  "Connection"
+  "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."
   (let ((url-request-method "GET")
         (url-request-extra-headers
          `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
 (defun ghost-mode--get-posts-callback (status)
-    ""
+    "Process post list callback, receive HTTP response STATUS."
     (ghost-mode--go-to-body)
 
     (let ((posts (ghost-mode--get-response-posts)))
@@ -60,7 +60,7 @@
       )))
 
 (defun ghost-mode--get-post-callback (status)
-    ""
+    "Process post read callback, receive HTTP response STATUS."
     (ghost-mode--go-to-body)
 
     (let ((posts (ghost-mode--get-response-posts)))

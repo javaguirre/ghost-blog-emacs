@@ -87,12 +87,12 @@
   (delete-region (point-min) (point)))
 
 (defun ghost-mode--get-response-posts ()
-  ""
+  "Get posts from HTTP response body."
   (let ((body (ghost-mode--get-response-body)))
     (gethash "posts" body)))
 
 (defun ghost-mode--get-response-body ()
-  ""
+  "Get HTTP response body json decoded."
   (let ((json-object-type 'hash-table))
     (json-read-from-string (buffer-string))))
 

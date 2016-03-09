@@ -44,7 +44,7 @@
 
     (let ((posts (ghost-mode--get-response-posts)))
       (define-button-type 'ghost-show-post-button
-	'action 'ghost-show-post
+	'action 'ghost-mode--show-post-action
 	'follow-link t
 	'help-echo "Show post")
 

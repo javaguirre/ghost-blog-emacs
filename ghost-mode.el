@@ -32,45 +32,45 @@
 (defun ghost-mode--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."
   (let ((url-request-method "GET")
-        (url-request-extra-headers
-         `(("Authorization" . ,ghost-mode-bearer-token))))
+	(url-request-extra-headers
+	 `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
 (defun ghost-mode--get-posts-callback (status)
-    "Process post list callback, receive HTTP response STATUS."
-    (ghost-mode--go-to-body)
+  "Process post list callback, receive HTTP response STATUS."
+  (ghost-mode--go-to-body)
 
-    (let ((posts (ghost-mode--get-response-posts)))
-      (define-button-type 'ghost-show-post-button
-	'action 'ghost-mode--show-post-action
-	'follow-link t
-	'help-echo "Show post")
+  (let ((posts (ghost-mode--get-response-posts)))
+    (define-button-type 'ghost-show-post-button
+      'action 'ghost-mode--show-post-action
+      'follow-link t
+      'help-echo "Show post")
 
-      (delete-region (point-min) (point-max))
+    (delete-region (point-min) (point-max))
 
-      (insert "Ghost mode - Posts\n\n")
+    (insert "Ghost mode - Posts\n\n")
 
-      (dotimes (i (length posts))
+    (dotimes (i (length posts))
 
-	(insert-text-button (format "%d %s - %s\n\n"
-          (gethash "id" (aref posts i))
-          (gethash "created_at" (aref posts i))
-          (gethash "title" (aref posts i)))
-	  :type 'ghost-show-post-button)
+      (insert-text-button (format "%d %s - %s\n\n"
+				  (gethash "id" (aref posts i))
+				  (gethash "created_at" (aref posts i))
+				  (gethash "title" (aref posts i)))
+			  :type 'ghost-show-post-button)
       )))
 
 (defun ghost-mode--get-post-callback (status)
-    "Process post read callback, receive HTTP response STATUS."
-    (ghost-mode--go-to-body)
+  "Process post read callback, receive HTTP response STATUS."
+  (ghost-mode--go-to-body)
 
-    (let ((posts (ghost-mode--get-response-posts)))
+  (let ((posts (ghost-mode--get-response-posts)))
 
-      (delete-region (point-min) (point-max))
+    (delete-region (point-min) (point-max))
 
-      (insert (format "%s\n\n%s"
-	(gethash "title" (aref posts 0))
-	(gethash "markdown" (aref posts 0))))
-      ))
+    (insert (format "%s\n\n%s"
+		    (gethash "title" (aref posts 0))
+		    (gethash "markdown" (aref posts 0))))
+    ))
 
 (defun ghost-mode--show-post-action (button)
   "Show a post by id from BUTTON."

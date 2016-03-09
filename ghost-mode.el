@@ -38,9 +38,7 @@
 
 (defun ghost-mode--get-posts-callback (status)
     ""
-    (switch-to-buffer-other-window (current-buffer))
-    (search-forward "\n\n")
-    (delete-region (point-min) (point))
+    (ghost-mode--go-to-body)
 
     (let ((posts (ghost-mode--get-response-posts)))
       (define-button-type 'ghost-show-post-button

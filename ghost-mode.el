@@ -56,8 +56,7 @@
 				  (gethash "id" (aref posts i))
 				  (gethash "created_at" (aref posts i))
 				  (gethash "title" (aref posts i)))
-			  :type 'ghost-show-post-button)
-      )))
+			  :type 'ghost-show-post-button))))
 
 (defun ghost-mode--get-post-callback (status)
   "Process post read callback, receive HTTP response STATUS."
@@ -69,8 +68,7 @@
 
     (insert (format "%s\n\n%s"
 		    (gethash "title" (aref posts 0))
-		    (gethash "markdown" (aref posts 0))))
-    ))
+		    (gethash "markdown" (aref posts 0))))))
 
 (defun ghost-mode--show-post-action (button)
   "Show a post by id from BUTTON."

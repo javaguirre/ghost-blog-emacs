@@ -62,19 +62,22 @@
   "Process post read callback, receive HTTP response STATUS."
   (ghost-mode--go-to-body)
 
-  (let ((posts (ghost-mode--get-response-posts)))
+  (let ((posts (ghost-mode--get-response-posts))
+	(post-buffer "ghost-mode post"))
 
+    (get-buffer-create post-buffer)
+    (switch-to-buffer post-buffer)
     (delete-region (point-min) (point-max))
-
     (insert (format "%s\n\n%s"
 		    (gethash "title" (aref posts 0))
-		    (gethash "markdown" (aref posts 0))))))
+		    (gethash "markdown" (aref posts 0))))
+    (setq-default major-mode 'markdown-mode)))
 
 (defun ghost-mode--show-post-action (button)
   "Show a post by id from BUTTON."
-  (let (id (car (split-string (button-label button))))
-    (message (button-label button))
-    (ghost-mode--connection (concat "/posts" id) 'ghost-mode--get-post-callback)))
+  (let* ((id (car (split-string (button-label button))))
+	 (endpoint (concat "/posts/" id)))
+    (ghost-mode--connection endpoint 'ghost-mode--get-post-callback)))
 
 (defun ghost-mode--go-to-body ()
   "Go to HTTP response body."

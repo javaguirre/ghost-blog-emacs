@@ -37,7 +37,7 @@
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."
-  (let ((url-request-method "GET")
+  (let ((url-request-method (or method "GET"))
 	(url-request-extra-headers
 	 `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))

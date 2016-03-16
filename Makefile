@@ -50,12 +50,7 @@ test-travis :
 
 test : build test-dep-1 test-autoloads
 	@cd $(TEST_DIR)                                   && \
-	(for test_lib in *-test.el; do                       \
-	    $(EMACS) $(EMACS_BATCH) -L . -L .. -l cl -l $(TEST_DEP_1) -l $$test_lib --eval \
-	    "(progn                                          \
-	      (fset 'ert--print-backtrace 'ignore)           \
-	      (ert-run-tests-batch-and-exit '(and \"$(TESTS)\" (not (tag :interactive)))))" || exit 1; \
-	done)
+        $(EMACS) $(EMACS_BATCH) -l ert -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
 
 clean :
 	@rm -f $(AUTOLOADS_FILE) *.elc *~ */*.elc */*~ $(TEST_DIR)/$(TEST_DEP_1).el

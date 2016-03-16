@@ -52,7 +52,7 @@
       'follow-link t
       'help-echo "Show post")
 
-    (delete-region (point-min) (point-max))
+    (erase-buffer)
 
     (insert "Ghost mode - Posts\n\n")
 
@@ -79,7 +79,7 @@
   (let ((post-buffer "ghost-mode post"))
     (get-buffer-create post-buffer)
     (switch-to-buffer post-buffer)
-    (delete-region (point-min) (point-max))
+    (erase-buffer)
     (insert buffer-data)
 
     (setq-default major-mode 'markdown-mode)))

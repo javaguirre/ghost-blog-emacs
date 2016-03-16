@@ -19,6 +19,7 @@
 ;;
 (require 'url)
 (require 'json)
+(eval-when-compile (require 'cl))
 
 (defvar ghost-mode-url nil)
 (defvar ghost-mode-bearer-token nil)

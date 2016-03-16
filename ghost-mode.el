@@ -24,6 +24,12 @@
 (defvar ghost-mode-bearer-token nil)
 
 ;;;###autoload
+(defun ghost-mode-new-post ()
+  "Create new post template."
+  (interactive)
+
+  (ghost-mode--use-ghost-post-buffer
+   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post"))
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)
@@ -65,12 +71,17 @@
   (let ((posts (ghost-mode--get-response-posts))
 	(post-buffer "ghost-mode post"))
 
+(defun ghost-mode--use-ghost-post-buffer (buffer-data)
+  "Use ghost post buffer and insert BUFFER-DATA on It."
+  (let ((post-buffer "ghost-mode post"))
     (get-buffer-create post-buffer)
     (switch-to-buffer post-buffer)
     (delete-region (point-min) (point-max))
     (insert (format "%s\n\n%s"
 		    (gethash "title" (aref posts 0))
 		    (gethash "markdown" (aref posts 0))))
+    (insert buffer-data)
+
     (setq-default major-mode 'markdown-mode)))
 
 (defun ghost-mode--show-post-action (button)

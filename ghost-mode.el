@@ -68,8 +68,11 @@
   "Process post read callback, receive HTTP response STATUS."
   (ghost-mode--go-to-body)
 
-  (let ((posts (ghost-mode--get-response-posts))
-	(post-buffer "ghost-mode post"))
+  (let ((posts (ghost-mode--get-response-posts)))
+    (ghost-mode--use-ghost-post-buffer
+     (format "%s\n\n%s"
+	     (gethash "title" (aref posts 0))
+	     (gethash "markdown" (aref posts 0))))))
 
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."
@@ -77,9 +80,6 @@
     (get-buffer-create post-buffer)
     (switch-to-buffer post-buffer)
     (delete-region (point-min) (point-max))
-    (insert (format "%s\n\n%s"
-		    (gethash "title" (aref posts 0))
-		    (gethash "markdown" (aref posts 0))))
     (insert buffer-data)
 
     (setq-default major-mode 'markdown-mode)))

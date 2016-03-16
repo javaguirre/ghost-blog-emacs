@@ -63,6 +63,10 @@ current post.
 
 ## Run unittests
 
-We use ERT to run the unittests
+We use ERT to run the unittests.
 
-TODO
+In the root of the project.
+
+```
+emacs -batch -l ert -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
+```

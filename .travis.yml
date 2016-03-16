@@ -1,0 +1,28 @@
+language: generic
+
+env:
+  global:
+    - CURL="curl -fsSkL --retry 9 --retry-delay 9"
+  matrix:
+    - EMACS=emacs24
+    - EMACS=emacs-snapshot
+
+install:
+  - if [ "$EMACS" = 'emacs24' ]; then
+        sudo add-apt-repository -y ppa:cassou/emacs &&
+        sudo apt-get -qq update &&
+        sudo apt-get -qq -f install &&
+        sudo apt-get -qq install emacs24 emacs24-el;
+    fi
+  - if [ "$EMACS" = 'emacs-snapshot' ]; then
+        sudo add-apt-repository -y ppa:ubuntu-elisp/ppa &&
+        sudo apt-get -qq update &&
+        sudo apt-get -qq -f install &&
+        sudo apt-get -qq install emacs-snapshot &&
+        sudo apt-get -qq install emacs-snapshot-el;
+    fi
+  - $CURL https://raw.githubusercontent.com/defunkt/markdown-mode/master/markdown-mode.el -o markdown-mode.el
+  - $EMACS --version
+
+script:
+  $EMACS --version && ( test "$EMACS" != 'emacs22' && make test EMACS="$EMACS" || make test-batch EMACS="$EMACS" )

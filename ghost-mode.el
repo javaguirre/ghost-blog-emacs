@@ -85,6 +85,18 @@
 
     (setq-default major-mode 'markdown-mode)))
 
+(defun ghost-mode--read-from-post-buffer ()
+  "Read from current post buffer and transform It to hash-table."
+  (let* ((start (string-match "---\n" (buffer-string)))
+	 (end (string-match "\n---" (buffer-string)))
+	 (metadata (substring (buffer-string) (+ start (length "---\n")) end)))
+    (setq items (split-string metadata "\n"))
+    (set post (make-hash-table :test 'equal))
+    (dolist (item items)
+      (setq current-item (split-string item ": "))
+      (puthash (car current-item) (cadr current-item) post))
+    ))
+
 (defun ghost-mode--show-post-action (button)
   "Show a post by id from BUTTON."
   (let* ((id (car (split-string (button-label button))))

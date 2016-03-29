@@ -40,6 +40,19 @@
   (let* ((json-object-type 'hash-table)
 	 (data (json-encode (ghost-mode--read-from-post-buffer))))
     (ghost-mode--connection "/posts" 'ghost-mode--create-post-callback "POST" data)))
+
+(defun ghost-mode-update-post ()
+  "Update a post."
+  (interactive)
+
+  (let* ((json-object-type 'hash-table)
+	 (data (json-encode (ghost-mode--read-from-post-buffer))))
+    (ghost-mode--connection
+     (concat "/posts" (gethash "id" data))
+     'ghost-mode--update-post-callback
+     "PUT"
+     data)))
+
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)

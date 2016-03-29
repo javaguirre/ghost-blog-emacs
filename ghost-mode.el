@@ -43,7 +43,7 @@
 
   (let* ((json-object-type 'hash-table)
 	 (data (json-encode (ghost-mode--read-from-post-buffer))))
-    (ghost-mode--connection "/posts" 'ghost-mode--create-post-callback "POST" data)))
+    (ghost-mode--connection (ghost-mode--get-post-list-endpoint) 'ghost-mode--create-post-callback "POST" data)))
 
 (defun ghost-mode-update-post ()
   "Update a post."
@@ -156,6 +156,14 @@
   "Get HTTP response body json decoded."
   (let ((json-object-type 'hash-table))
     (json-read-from-string (buffer-string))))
+
+;; Endpoints
+
+(defun ghost-mode--get-post-list-endpoint ()
+  "Get the post list endpoint."
+  (let ((limit (or ghost-mode-post-list-limit "")))
+    (if limit (setq limit (concat "?limit=" limit)))
+    (concat ghost-mode-post-endpoint limit)))
 
 (provide 'ghost-mode)
 ;;; ghost-mode.el ends here

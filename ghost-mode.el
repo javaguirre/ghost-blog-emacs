@@ -43,6 +43,17 @@
 	 `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
+(defun ghost-mode--create-post-callback (status)
+  "Process post creation, receive HTTP response STATUS."
+  ;; TODO Check HTTP status
+  (message "Post created successfully"))
+
+(defun ghost-mode--update-post-callback (status)
+  "Process post update, receive HTTP response STATUS."
+  ;; TODO Check HTTP status
+  ;; TODO What to do after PUT finished?
+  (switch-to-buffer (current-buffer)))
+
 (defun ghost-mode--get-posts-callback (status)
   "Process post list callback, receive HTTP response STATUS."
   (ghost-mode--go-to-body)

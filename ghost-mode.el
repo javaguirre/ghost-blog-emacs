@@ -69,6 +69,8 @@
 	 `(("Authorization" . ,ghost-mode-bearer-token))))
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
+;; Callbacks
+
 (defun ghost-mode--create-post-callback (status)
   "Process post creation, receive HTTP response STATUS."
   ;; TODO Check HTTP status
@@ -111,6 +113,8 @@
      (format "%s\n\n%s"
 	     (gethash "title" (aref posts 0))
 	     (gethash "markdown" (aref posts 0))))))
+
+;; Utils
 
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."

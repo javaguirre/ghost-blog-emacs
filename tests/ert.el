@@ -18,6 +18,20 @@
     (should
      (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint)))))
 
+(ert-deftest new-post-read-from-post-buffer ()
+  (ghost-mode-new-post)
+
+  (let* ((expected-hash (make-hash-table :test 'equal))
+	 (post-hash (ghost-mode--read-from-post-buffer)))
+    
+    (puthash "title" "New title" expected-hash)
+    (puthash "slug" "/new-title" expected-hash)
+
+    (should
+     (equal (gethash "title" expected-hash) (gethash "title" post-hash)))
+    (should
+     (equal (gethash "slug" expected-hash) (gethash "slug" post-hash)))))
+
 
 (provide 'ert)
 ;;; ert.el ends here

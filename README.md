@@ -38,7 +38,7 @@ Shows a clickable list of the last posts.
 It will create a new buffer with a default post template.
 
 ```elisp
-(ghost-mode-new-posts)
+(ghost-mode-new-post)
 ```
 
 #### Create post

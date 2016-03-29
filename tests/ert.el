@@ -14,9 +14,10 @@
    (equal "/posts/?limit=10" (ghost-mode--get-post-list-endpoint))))
 
 (ert-deftest get-post-list-endpoint-limit-changed ()
-  (setq ghost-mode-post-list-limit 2)
-  (should
-   (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint))))
+  (let ((ghost-mode-post-list-limit 2))
+    (should
+     (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint)))))
+
 
 (provide 'ert)
 ;;; ert.el ends here

@@ -23,6 +23,7 @@
 
 (defvar ghost-mode-url nil)
 (defvar ghost-mode-bearer-token nil)
+(defvar ghost-mode-metadata-default-header-string "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
 
 ;;;###autoload
 (defun ghost-mode-new-post ()
@@ -30,7 +31,7 @@
   (interactive)
 
   (ghost-mode--use-ghost-post-buffer
-   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post"))
+   ghost-mode-metadata-default-header-string))
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)

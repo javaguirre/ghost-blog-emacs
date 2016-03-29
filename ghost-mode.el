@@ -136,8 +136,9 @@
 	 (current-item nil))
     (dolist (item items)
       (setq current-item (split-string item ": "))
-      (puthash (car current-item) (cadr current-item) post))
-    ))
+      (if (> (length (car current-item)) 0)
+        (puthash (car current-item) (cadr current-item) post)))
+    post))
 
 (defun ghost-mode--show-post-action (button)
   "Show a post by id from BUTTON."

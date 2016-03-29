@@ -166,7 +166,7 @@
 (defun ghost-mode--get-post-list-endpoint ()
   "Get the post list endpoint."
   (let ((limit (or ghost-mode-post-list-limit "")))
-    (if limit (setq limit (concat "?limit=" limit)))
+    (if limit (setq limit (format "?limit=%d" limit)))
     (concat ghost-mode-post-endpoint limit)))
 
 (provide 'ghost-mode)

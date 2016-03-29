@@ -32,6 +32,14 @@
 
   (ghost-mode--use-ghost-post-buffer
    ghost-mode-metadata-default-header-string))
+
+(defun ghost-mode-save-new-post ()
+  "Create new post."
+  (interactive)
+
+  (let* ((json-object-type 'hash-table)
+	 (data (json-encode (ghost-mode--read-from-post-buffer))))
+    (ghost-mode--connection "/posts" 'ghost-mode--create-post-callback "POST" data)))
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)

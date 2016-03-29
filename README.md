@@ -16,7 +16,7 @@ M-x package-install ghost
 
 You need to set up this variables for the package to work.
 
-There is no Oauth for now, [you need to get a Bearer token](http://api.ghost.org/docs/client-authentication).
+There is not Oauth for now, [you need to get a Bearer token](http://api.ghost.org/docs/client-authentication).
 
 ```elisp
 (setq ghost-mode-url "https://javaguirre.net/ghost/api/v0.1")
@@ -27,7 +27,7 @@ There is no Oauth for now, [you need to get a Bearer token](http://api.ghost.org
 
 #### Show post list
 
-Shows a clickable list of the last posts.
+Shows a clickable list of the last posts of your blog.
 
 ```elisp
 (ghost-mode-get-posts)

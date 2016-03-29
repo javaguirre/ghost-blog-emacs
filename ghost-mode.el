@@ -89,9 +89,10 @@
   "Read from current post buffer and transform It to hash-table."
   (let* ((start (string-match "---\n" (buffer-string)))
 	 (end (string-match "\n---" (buffer-string)))
-	 (metadata (substring (buffer-string) (+ start (length "---\n")) end)))
-    (setq items (split-string metadata "\n"))
-    (set post (make-hash-table :test 'equal))
+	 (metadata (substring (buffer-string) (+ start (length "---\n")) end))
+	 (items (split-string metadata "\n"))
+	 (post (make-hash-table :test 'equal))
+	 (current-item nil))
     (dolist (item items)
       (setq current-item (split-string item ": "))
       (puthash (car current-item) (cadr current-item) post))

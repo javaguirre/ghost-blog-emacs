@@ -23,6 +23,10 @@
 
 (defvar ghost-mode-url nil)
 (defvar ghost-mode-bearer-token nil)
+(defvar ghost-mode-post-list-limit 10)
+
+(defvar ghost-mode-post-list-header-title "Ghost mode - Posts\n\n")
+(defvar ghost-mode-post-endpoint "/posts/")
 (defvar ghost-mode-metadata-default-header-string "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
 
 ;;;###autoload
@@ -48,7 +52,7 @@
   (let* ((json-object-type 'hash-table)
 	 (data (json-encode (ghost-mode--read-from-post-buffer))))
     (ghost-mode--connection
-     (concat "/posts" (gethash "id" data))
+     (concat ghost-mode-post-endpoint (gethash "id" data))
      'ghost-mode--update-post-callback
      "PUT"
      data)))
@@ -56,7 +60,7 @@
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
   (interactive)
-  (ghost-mode--connection "/posts" 'ghost-mode--get-posts-callback))
+  (ghost-mode--connection ghost-mode-post-endpoint 'ghost-mode--get-posts-callback))
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."
@@ -88,7 +92,7 @@
 
     (erase-buffer)
 
-    (insert "Ghost mode - Posts\n\n")
+    (insert ghost-mode-post-list-header-title)
 
     (dotimes (i (length posts))
 

@@ -1,5 +1,7 @@
 # Ghost mode for Emacs
 
+[![Build Status](https://travis-ci.org/javaguirre/ghost-mode.svg?branch=master)](https://travis-ci.org/javaguirre/ghost-mode)
+
 ## Requirement
 
 The package uses `markdown-mode` for highlighting.

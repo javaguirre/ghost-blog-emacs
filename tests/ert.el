@@ -4,6 +4,34 @@
 
 (require 'ert)
 
+(defvar test-data)
+(defvar test-body)
+
+(setq test-data
+      "
+HTTP/1.1 200 OK
+Server: cloudflare-nginx
+Date: Wed, 16 Mar 2016 14:40:23 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Cache-Control: no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0
+Cf-Railgun: 8fa74abe46 3.53 0.074589 0030 3350
+Last-Modified: Wed, 16 Mar 2016 14:40:23 GMT
+Status: 200 OK
+Vary: Accept-Encoding
+X-Ghost-Cache-Status: From Backend - Not Cached
+X-Powered-By: Express
+CF-RAY: 2848f5c229e802d9-AMS
+Content-Encoding: gzip
+
+
+{\"posts\":[{\"id\":1,\"uuid\":\"\",\"title\":\"Title 1\",\"slug\":\"save-and-load-requests\",\"markdown\":\"Some months ago I started to use\",\"image\":\"/content/images/2016/03/Atom-Wallpaper.png\",\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-03-15T11:04:59.000Z\",\"created_by\":1,\"updated_at\":\"2016-03-16T08:28:46.000Z\",\"updated_by\":1,\"published_at\":\"2016-03-16T08:28:46.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/03/16/save-and-load-requests\"},{\"id\":2,\"uuid\":\"\",\"title\":\"Title 2\",\"image\":null,\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-01-17T12:15:21.000Z\",\"created_by\":1,\"updated_at\":\"2016-01-17T12:24:16.000Z\",\"updated_by\":1,\"published_at\":\"2016-01-17T12:23:41.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/01/17/ansible-role\"}],\"meta\":{\"pagination\":{\"page\":1,\"limit\":2,\"pages\":97,\"total\":193,\"next\":2,\"prev\":null}}}
+")
+
+(setq test-body
+      "{\"posts\":[{\"id\":1,\"uuid\":\"\",\"title\":\"Title 1\",\"slug\":\"save-and-load-requests\",\"markdown\":\"Some months ago I started to use\",\"image\":\"/content/images/2016/03/Atom-Wallpaper.png\",\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-03-15T11:04:59.000Z\",\"created_by\":1,\"updated_at\":\"2016-03-16T08:28:46.000Z\",\"updated_by\":1,\"published_at\":\"2016-03-16T08:28:46.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/03/16/save-and-load-requests\"},{\"id\":2,\"uuid\":\"\",\"title\":\"Title 2\",\"image\":null,\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-01-17T12:15:21.000Z\",\"created_by\":1,\"updated_at\":\"2016-01-17T12:24:16.000Z\",\"updated_by\":1,\"published_at\":\"2016-01-17T12:23:41.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/01/17/ansible-role\"}],\"meta\":{\"pagination\":{\"page\":1,\"limit\":2,\"pages\":97,\"total\":193,\"next\":2,\"prev\":null}}}")
+
 (ert-deftest new-post ()
   (ghost-mode-new-post)
   (should

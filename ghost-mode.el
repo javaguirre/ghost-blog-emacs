@@ -10,9 +10,6 @@
 
 ;;; Commentary:
 
-;; TODO EDIT and save!
-;; TODO Set buffer read only
-;;
 ;; This is a minor mode to manage Ghost blogs
 
 ;;; Code:

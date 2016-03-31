@@ -18,4 +18,4 @@ TEST_DEP_1_LATEST_URL=http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/emac
          test test-interactive clean edit test-dep-1 test-dep-2 test-dep-3     \
          test-dep-4 test-dep-5 test-dep-6 test-dep-7 test-dep-8 test-dep-9
 test:
-	$(EMACS) $(EMACS_BATCH) -l ert -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
+	$(EMACS) $(EMACS_BATCH) -l ert -l markdown-mode.el -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit

@@ -16,6 +16,7 @@
 ;;
 (require 'url)
 (require 'json)
+(require 'markdown-mode)
 (eval-when-compile (require 'cl))
 
 (defvar ghost-mode-url nil)
@@ -128,8 +129,7 @@
     (switch-to-buffer post-buffer)
     (erase-buffer)
     (insert buffer-data)
-
-    (setq-default major-mode 'markdown-mode)))
+    (markdown-mode)))
 
 (defun ghost-mode--read-from-post-buffer ()
   "Read from current post buffer and transform It to hash-table."

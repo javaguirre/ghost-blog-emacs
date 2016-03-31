@@ -30,6 +30,7 @@
 (defvar ghost-mode-http-authentication-warning "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
 
 ;;;###autoload
+;;; Commands
 (defun ghost-mode-new-post ()
   "Create new post template."
   (interactive)

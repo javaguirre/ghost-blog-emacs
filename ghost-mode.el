@@ -28,6 +28,7 @@
 (defvar ghost-mode-post-list-header-title "Ghost mode - Posts\n\n")
 (defvar ghost-mode-post-endpoint "/posts/")
 (defvar ghost-mode-metadata-default-header-string "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
+(defvar ghost-mode-http-authentication-warning "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
 
 ;;;###autoload
 (defun ghost-mode-new-post ()
@@ -61,6 +62,12 @@
   "Get posts from ghost."
   (interactive)
   (ghost-mode--connection ghost-mode-post-endpoint 'ghost-mode--get-posts-callback))
+
+;; Advice
+(defadvice url-http-handle-authentication (around ghost-mode-get-posts)
+  "Advice for url.el http authentication."
+  (message ghost-mode-http-authentication-warning))
+(ad-activate 'url-http-handle-authentication)
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."

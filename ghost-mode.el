@@ -26,8 +26,10 @@
 (defvar ghost-mode-post-list-header-title "Ghost mode - Posts\n\n")
 (defvar ghost-mode-post-endpoint "/posts/")
 (defvar ghost-mode-buffer-post-name "ghost-post.md")
-(defvar ghost-mode-metadata-default-header-string "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
-(defvar ghost-mode-http-authentication-warning "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
+(defvar ghost-mode-metadata-default-header-string
+  "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
+(defvar ghost-mode-http-authentication-warning
+  "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
 
 ;;;###autoload
 ;;; Commands

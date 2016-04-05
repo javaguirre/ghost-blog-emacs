@@ -46,6 +46,14 @@ Content-Encoding: gzip
   (should
    (equal "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post" (buffer-string))))
 
+(ert-deftest get-posts ()
+  (let ((ghost-mode-url "http://javaguirre.net/ghost/api/v0.1")
+	(ghost-mode-bearer-token ""))
+    (ghost-mode-get-posts)
+    (sit-for 5)
+    (should
+     (equal ghost-mode-http-authentication-warning (last-message)))))
+
 (ert-deftest get-post-list-endpoint ()
   (should
    (equal "/posts/?limit=10" (ghost-mode--get-post-list-endpoint))))

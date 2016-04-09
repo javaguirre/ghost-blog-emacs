@@ -6,6 +6,7 @@
 
 (defvar test-data)
 (defvar test-body)
+(defvar expected-metadata-string)
 
 (setq test-data
       "
@@ -31,6 +32,9 @@ Content-Encoding: gzip
 
 (setq test-body
       "{\"posts\":[{\"id\":1,\"uuid\":\"\",\"title\":\"Title 1\",\"slug\":\"save-and-load-requests\",\"markdown\":\"Some months ago I started to use\",\"image\":\"/content/images/2016/03/Atom-Wallpaper.png\",\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-03-15T11:04:59.000Z\",\"created_by\":1,\"updated_at\":\"2016-03-16T08:28:46.000Z\",\"updated_by\":1,\"published_at\":\"2016-03-16T08:28:46.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/03/16/save-and-load-requests\"},{\"id\":2,\"uuid\":\"\",\"title\":\"Title 2\",\"image\":null,\"featured\":false,\"page\":false,\"status\":\"published\",\"language\":\"en_US\",\"meta_title\":null,\"meta_description\":null,\"created_at\":\"2016-01-17T12:15:21.000Z\",\"created_by\":1,\"updated_at\":\"2016-01-17T12:24:16.000Z\",\"updated_by\":1,\"published_at\":\"2016-01-17T12:23:41.000Z\",\"published_by\":1,\"author\":1,\"url\":\"/2016/01/17/ansible-role\"}],\"meta\":{\"pagination\":{\"page\":1,\"limit\":2,\"pages\":97,\"total\":193,\"next\":2,\"prev\":null}}}")
+
+(setq expected-metadata-string
+      "---\n\ntitle:\nslug:\nstatus:\nimage:\nfeatured:\npage:\nlanguage:\nmeta_title:\nmeta_description:\n\n---\n\n")
 
 (defun last-message ()
   "Get last message in Messages."
@@ -77,6 +81,10 @@ Content-Encoding: gzip
     (should
      (equal (gethash "slug" expected-hash) (gethash "slug" post-hash)))))
 
+(ert-deftest get-metadata-as-string ()
+  (let ((metadata (ghost-mode--get-metadata-as-string)))
+    (should
+     (equal expected-metadata-string metadata))))
 
 (provide 'ert)
 ;;; ert.el ends here

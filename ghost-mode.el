@@ -30,6 +30,11 @@
   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
 (defvar ghost-mode-http-authentication-warning
   "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
+(defvar ghost-mode--metadata-prefix "---\n\n")
+(defvar ghost-mode--metadata-suffix "\n---\n\n")
+(defvar ghost-mode--metadata-field-separator ":\n")
+(defvar ghost-mode-default-metadata-fields
+  '(title slug status image featured page language meta_title meta_description))
 
 ;;;###autoload
 ;;; Commands
@@ -124,6 +129,16 @@
 	     (gethash "markdown" (aref posts 0))))))
 
 ;; Utils
+
+(defun ghost-mode--get-metadata-as-string ()
+  "Get list of metadata as a string."
+  (let ((metadata ghost-mode--metadata-prefix))
+    (dolist (metadata_field ghost-mode-default-metadata-fields)
+      (setq metadata
+	    (concat metadata (symbol-name metadata_field)
+		    ghost-mode--metadata-field-separator)))
+    (setq metadata (concat metadata ghost-mode--metadata-suffix))
+    metadata))
 
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."

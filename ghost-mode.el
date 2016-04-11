@@ -128,8 +128,7 @@
 	     (gethash "title" (aref posts 0))
 	     (gethash "markdown" (aref posts 0))))))
 
-;; Utils
-
+;; Metadata
 (defun ghost-mode--get-metadata-as-string ()
   "Get list of metadata as a string."
   (let ((metadata ghost-mode--metadata-prefix))
@@ -139,6 +138,8 @@
 		    ghost-mode--metadata-field-separator)))
     (setq metadata (concat metadata ghost-mode--metadata-suffix))
     metadata))
+
+;; Utils
 
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."

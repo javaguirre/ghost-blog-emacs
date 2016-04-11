@@ -160,7 +160,8 @@
 	 (current-item nil))
     (dolist (item items)
       (setq current-item (split-string item ": "))
-      (if (> (length (car current-item)) 0)
+      (if (and (> (length (car current-item)) 0)
+	       (member (intern (car current-item)) ghost-mode-default-metadata-fields))
         (puthash (car current-item) (cadr current-item) post)))
     post))
 

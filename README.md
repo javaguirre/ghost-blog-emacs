@@ -69,6 +69,12 @@ We use ERT to run the unittests.
 
 In the root of the project.
 
-```
+```bash
 emacs -batch -l ert -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
+```
+
+or
+
+```bash
+make test
 ```

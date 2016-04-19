@@ -195,7 +195,7 @@
 	 (endpoint (concat "/posts/" id)))
     (ghost-mode--connection endpoint 'ghost-mode--get-post-callback)))
 
-(defun ghost-mode--get-http-status ()
+(defun ghost-mode--get-http-status-code ()
   "Get the HTTP status of the current request."
   (switch-to-buffer (current-buffer))
 

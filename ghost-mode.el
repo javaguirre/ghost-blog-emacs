@@ -62,19 +62,28 @@
 
   (let* ((json-object-type 'hash-table)
 	 (data (json-encode (ghost-mode--read-from-post-buffer))))
-    (ghost-mode--connection (ghost-mode--get-post-list-endpoint) 'ghost-mode--create-post-callback "POST" data)))
+    (if (ghost-mode--is-metadata-valid metadata)
+        (ghost-mode--connection
+         (ghost-mode--get-post-list-endpoint)
+         'ghost-mode--create-post-callback
+         "POST"
+         data)
+      (message ghost-mode--invalid-metadata-message))))
 
 (defun ghost-mode-update-post ()
   "Update a post."
   (interactive)
 
   (let* ((json-object-type 'hash-table)
-	 (data (json-encode (ghost-mode--read-from-post-buffer))))
-    (ghost-mode--connection
-     (concat ghost-mode-post-endpoint (gethash "id" data))
-     'ghost-mode--update-post-callback
-     "PUT"
-     data)))
+	 (metadata (ghost-mode--read-from-post-buffer))
+	 (payload (json-encode metadata)))
+    (if (ghost-mode--is-metadata-valid metadata)
+	(ghost-mode--connection
+	 (concat ghost-mode-post-endpoint (gethash "id" metadata))
+	 'ghost-mode--update-post-callback
+	 "PUT"
+	 payload)
+      (message ghost-mode--invalid-metadata-message))))
 
 (defun ghost-mode-get-posts ()
   "Get posts from ghost."
@@ -148,6 +157,10 @@
 		    ghost-mode--metadata-field-separator)))
     (setq metadata (concat metadata ghost-mode--metadata-suffix))
     metadata))
+
+(defun ghost-mode--is-metadata-valid (metadata)
+  "Validate METADATA."
+  ;; TODO)
 
 ;; Utils
 

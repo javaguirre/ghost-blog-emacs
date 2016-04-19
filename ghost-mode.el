@@ -35,6 +35,8 @@
 (defvar ghost-mode--metadata-field-separator ":\n")
 (defvar ghost-mode-default-metadata-fields
   '(title slug status image featured page language meta_title meta_description))
+(defvar ghost-mode-required-metadata-fields
+  '(title markdown))
 
 ;;;###autoload
 ;;; Commands

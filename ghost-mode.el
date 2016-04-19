@@ -46,6 +46,9 @@
 (defvar ghost-mode--invalid-metadata-message "Metadata not valid!")
 (defvar ghost-mode--update-post-message "Post updated successfully!")
 (defvar ghost-mode--create-post-message "Post created successfully!")
+(defvar
+  ghost-mode--persist-post-failed
+  "Post persist failed, please check if your credentials well set")
 
 ;;;###autoload
 ;;; Commands

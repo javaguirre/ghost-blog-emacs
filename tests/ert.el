@@ -36,7 +36,7 @@ Content-Encoding: gzip
 (setq expected-metadata-string
       "---\n\ntitle:\nslug:\nstatus:\nimage:\nfeatured:\npage:\nlanguage:\nmeta_title:\nmeta_description:\n\n---\n\n")
 
-(defun last-message ()
+(defun ghost-mode-ert--last-message ()
   "Get last message in Messages."
   (with-current-buffer "*Messages*"
     (forward-line (- 1 0))
@@ -45,29 +45,29 @@ Content-Encoding: gzip
       (forward-line 0)
       (buffer-substring-no-properties (point) end))))
 
-(ert-deftest new-post ()
+(ert-deftest ghost-mode-new-post ()
   (ghost-mode-new-post)
   (should
    (equal "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post" (buffer-string))))
 
-(ert-deftest get-posts ()
+(ert-deftest ghost-mode-get-posts ()
   (let ((ghost-mode-url "http://javaguirre.net/ghost/api/v0.1")
 	(ghost-mode-bearer-token ""))
     (ghost-mode-get-posts)
     (sit-for 5)
     (should
-     (equal ghost-mode-http-authentication-warning (last-message)))))
+     (equal ghost-mode-http-authentication-warning (ghost-mode-ert--last-message)))))
 
-(ert-deftest get-post-list-endpoint ()
+(ert-deftest ghost-mode-get-post-list-endpoint ()
   (should
    (equal "/posts/?limit=10" (ghost-mode--get-post-list-endpoint))))
 
-(ert-deftest get-post-list-endpoint-limit-changed ()
+(ert-deftest ghost-mode-get-post-list-endpoint-limit-changed ()
   (let ((ghost-mode-post-list-limit 2))
     (should
      (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint)))))
 
-(ert-deftest new-post-read-from-post-buffer ()
+(ert-deftest ghost-mode-new-post-read-from-post-buffer ()
   (ghost-mode-new-post)
 
   (let* ((expected-hash (make-hash-table :test 'equal))

@@ -160,7 +160,8 @@
 
 (defun ghost-mode--is-metadata-valid (metadata)
   "Validate METADATA."
-  ;; TODO)
+  ;; TODO
+  )
 
 ;; Utils
 

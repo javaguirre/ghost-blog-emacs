@@ -56,7 +56,7 @@ Content-Encoding: gzip
     (ghost-mode-get-posts)
     (sit-for 5)
     (should
-     (equal ghost-mode-http-authentication-warning (ghost-mode-ert--last-message)))))
+     (equal ghost-mode-http-authentication-warning-message (ghost-mode-ert--last-message)))))
 
 (ert-deftest ghost-mode-get-post-list-endpoint ()
   (should

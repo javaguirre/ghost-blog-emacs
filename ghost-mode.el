@@ -222,6 +222,11 @@
   (let ((json-object-type 'hash-table))
     (json-read-from-string (buffer-string))))
 
+(defun ghost-mode--is-request-successful ()
+  "Check if the request has a successful http status."
+  (let ((ghost-mode--http-ok "200"))
+   (= (ghost-mode--get-http-status-code) ghost-mode--http-ok)))
+
 ;; Endpoints
 
 (defun ghost-mode--get-post-list-endpoint ()

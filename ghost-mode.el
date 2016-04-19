@@ -109,14 +109,15 @@
 ;; Callbacks
 (defun ghost-mode--create-post-callback (status)
   "Process post creation, receive HTTP response STATUS."
-  ;; TODO Check HTTP status
-  (message ghost-mode--create-post-message))
+  (if (ghost-mode--is-request-successful)
+      (message ghost-mode--create-post-message)
+    (message ghost-mode--persist-post-failed)))
 
 (defun ghost-mode--update-post-callback (status)
   "Process post update, receive HTTP response STATUS."
-  ;; TODO Check HTTP status
-  ;; TODO What to do after PUT finished?
-  (message ghost-mode--update-post-message))
+  (if (ghost-mode--is-request-successful)
+      (message ghost-mode--update-post-message)
+    (message ghost-mode--persist-post-failed)))
 
 (defun ghost-mode--get-posts-callback (status)
   "Process post list callback, receive HTTP response STATUS."
@@ -167,7 +168,6 @@
   )
 
 ;; Utils
-
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."
   (let ((post-buffer ghost-mode-buffer-post-name))
@@ -187,6 +187,7 @@
 	 (current-item nil))
     (dolist (item items)
       (setq current-item (split-string item ": "))
+
       (if (and (> (length (car current-item)) 0)
 	       (member (intern (car current-item)) ghost-mode-default-metadata-fields))
         (puthash (car current-item) (cadr current-item) post)))

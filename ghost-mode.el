@@ -181,6 +181,14 @@
 	 (endpoint (concat "/posts/" id)))
     (ghost-mode--connection endpoint 'ghost-mode--get-post-callback)))
 
+(defun ghost-mode--get-http-status ()
+  "Get the HTTP status of the current request."
+  (switch-to-buffer (current-buffer))
+
+  (let* ((http-status-length 3)
+	 (start-point (re-search-forward "\\s-")))
+	 (buffer-substring start-point (+ start-point http-status-length))))
+
 (defun ghost-mode--go-to-body ()
   "Go to HTTP response body."
   (switch-to-buffer (current-buffer))

@@ -26,17 +26,26 @@
 (defvar ghost-mode-post-list-header-title "Ghost mode - Posts\n\n")
 (defvar ghost-mode-post-endpoint "/posts/")
 (defvar ghost-mode-buffer-post-name "ghost-post.md")
+
+;; Metadata
 (defvar ghost-mode-metadata-default-header-string
   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
-(defvar ghost-mode-http-authentication-warning
-  "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
 (defvar ghost-mode--metadata-prefix "---\n\n")
 (defvar ghost-mode--metadata-suffix "\n---\n\n")
 (defvar ghost-mode--metadata-field-separator ":\n")
+
+;; Fields
 (defvar ghost-mode-default-metadata-fields
   '(title slug status image featured page language meta_title meta_description))
 (defvar ghost-mode-required-metadata-fields
   '(title markdown))
+
+;; Messages
+(defvar ghost-mode-http-authentication-warning-message
+  "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
+(defvar ghost-mode--invalid-metadata-message "Metadata not valid!")
+(defvar ghost-mode--update-post-message "Post updated successfully!")
+(defvar ghost-mode--create-post-message "Post created successfully!")
 
 ;;;###autoload
 ;;; Commands
@@ -75,7 +84,7 @@
 ;; Advice
 (defadvice url-http-handle-authentication (around ghost-mode-get-posts)
   "Advice for url.el http authentication."
-  (message ghost-mode-http-authentication-warning))
+  (message ghost-mode-http-authentication-warning-message))
 (ad-activate 'url-http-handle-authentication)
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
@@ -86,17 +95,16 @@
     (url-retrieve (concat ghost-mode-url endpoint) callback)))
 
 ;; Callbacks
-
 (defun ghost-mode--create-post-callback (status)
   "Process post creation, receive HTTP response STATUS."
   ;; TODO Check HTTP status
-  (message "Post created successfully"))
+  (message ghost-mode--create-post-message))
 
 (defun ghost-mode--update-post-callback (status)
   "Process post update, receive HTTP response STATUS."
   ;; TODO Check HTTP status
   ;; TODO What to do after PUT finished?
-  (switch-to-buffer (current-buffer)))
+  (message ghost-mode--update-post-message))
 
 (defun ghost-mode--get-posts-callback (status)
   "Process post list callback, receive HTTP response STATUS."

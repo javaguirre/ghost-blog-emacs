@@ -6,8 +6,7 @@
 
 ;; Variables
 (defvar ghost-mode--test-data
-      "
-HTTP/1.1 200 OK
+      "HTTP/1.1 200 OK
 Server: cloudflare-nginx
 Date: Wed, 16 Mar 2016 14:40:23 GMT
 Content-Type: application/json; charset=utf-8
@@ -79,7 +78,15 @@ Content-Encoding: gzip
     (should
      (equal (gethash "slug" expected-hash) (gethash "slug" post-hash)))))
 
-(ert-deftest get-metadata-as-string ()
+(ert-deftest ghost-mode-get-http-status-code ()
+  (with-temp-buffer
+    (insert ghost-mode--test-data)
+    (goto-char (point-min))
+
+    (should
+     (equal "200" (ghost-mode--get-http-status-code)))))
+
+(ert-deftest ghost-mode-get-metadata-as-string ()
   (let ((metadata (ghost-mode--get-metadata-as-string)))
     (should
      (equal ghost-mode--expected-metadata-string metadata))))

@@ -32,20 +32,14 @@ Content-Encoding: gzip
       "---\n\ntitle:\nslug:\nstatus:\nimage:\nfeatured:\npage:\nlanguage:\nmeta_title:\nmeta_description:\n\n---\n\n")
 
 ;; Unittest
-(defun ghost-mode-ert--last-message ()
-  "Get last message in Messages."
-  (with-current-buffer "*Messages*"
-    (forward-line (- 1 0))
-    (backward-char)
-    (let ((end (point)))
-      (forward-line 0)
-      (buffer-substring-no-properties (point) end))))
 
+;; Commands
 (ert-deftest ghost-mode-new-post ()
   (ghost-mode-new-post)
   (should
    (equal "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post" (buffer-string))))
 
+;; Advice
 (ert-deftest ghost-mode-get-posts ()
   (let ((ghost-mode-url "http://javaguirre.net/ghost/api/v0.1")
 	(ghost-mode-bearer-token ""))
@@ -54,15 +48,13 @@ Content-Encoding: gzip
     (should
      (equal ghost-mode-http-authentication-warning-message (ghost-mode-ert--last-message)))))
 
-(ert-deftest ghost-mode-get-post-list-endpoint ()
-  (should
-   (equal "/posts/?limit=10" (ghost-mode--get-post-list-endpoint))))
-
-(ert-deftest ghost-mode-get-post-list-endpoint-limit-changed ()
-  (let ((ghost-mode-post-list-limit 2))
+;; Metadata
+(ert-deftest ghost-mode-get-metadata-as-string ()
+  (let ((metadata (ghost-mode--get-metadata-as-string)))
     (should
-     (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint)))))
+     (equal ghost-mode--expected-metadata-string metadata))))
 
+;; Utils
 (ert-deftest ghost-mode-new-post-read-from-post-buffer ()
   (ghost-mode-new-post)
 
@@ -98,10 +90,25 @@ Content-Encoding: gzip
     (should
      (equal ghost-mode--test-body (buffer-string)))))
 
-(ert-deftest ghost-mode-get-metadata-as-string ()
-  (let ((metadata (ghost-mode--get-metadata-as-string)))
+;; Endpoint
+(ert-deftest ghost-mode-get-post-list-endpoint ()
+  (should
+   (equal "/posts/?limit=10" (ghost-mode--get-post-list-endpoint))))
+
+(ert-deftest ghost-mode-get-post-list-endpoint-limit-changed ()
+  (let ((ghost-mode-post-list-limit 2))
     (should
-     (equal ghost-mode--expected-metadata-string metadata))))
+     (equal "/posts/?limit=2" (ghost-mode--get-post-list-endpoint)))))
+
+;; Utils for ert
+(defun ghost-mode-ert--last-message ()
+  "Get last message in Messages."
+  (with-current-buffer "*Messages*"
+    (forward-line (- 1 0))
+    (backward-char)
+    (let ((end (point)))
+      (forward-line 0)
+      (buffer-substring-no-properties (point) end))))
 
 (provide 'ert)
 ;;; ert.el ends here

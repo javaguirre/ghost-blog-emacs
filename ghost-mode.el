@@ -43,7 +43,9 @@
 ;; Messages
 (defvar ghost-mode-http-authentication-warning-message
   "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
-(defvar ghost-mode--invalid-metadata-message "Metadata not valid!")
+(defvar
+  ghost-mode--invalid-metadata-message
+  "Error in metadata, you need to set the title")
 (defvar ghost-mode--update-post-message "Post updated successfully!")
 (defvar ghost-mode--create-post-message "Post created successfully!")
 (defvar
@@ -177,8 +179,11 @@
 
 (defun ghost-mode--is-metadata-valid (metadata)
   "Validate METADATA."
-  ;; TODO
-  )
+  (let ((is-valid t))
+    (dolist (required-metadata-field ghost-mode-required-metadata-fields)
+      (unless (gethash (symbol-name required-metadata-field) metadata)
+	(setq is-valid nil)))
+    is-valid))
 
 ;; Utils
 (defun ghost-mode--use-ghost-post-buffer (buffer-data)

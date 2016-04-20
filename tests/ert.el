@@ -54,6 +54,21 @@ Content-Encoding: gzip
     (should
      (equal ghost-mode--expected-metadata-string metadata))))
 
+(ert-deftest ghost-mode-is-metadata-valid-return-true ()
+  (let ((test-metadata (make-hash-table :test 'equal)))
+    (puthash "title" "New title" test-metadata)
+    (puthash "markdown" "New post" test-metadata)
+
+    (should
+     (equal t (ghost-mode--is-metadata-valid test-metadata)))))
+
+(ert-deftest ghost-mode-is-metadata-valid-return-false ()
+  (let ((test-metadata (make-hash-table :test 'equal)))
+    (puthash "title" "New title" test-metadata)
+
+    (should
+     (equal nil (ghost-mode--is-metadata-valid test-metadata)))))
+
 ;; Utils
 (ert-deftest ghost-mode-new-post-read-from-post-buffer ()
   (ghost-mode-new-post)

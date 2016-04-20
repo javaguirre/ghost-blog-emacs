@@ -162,6 +162,19 @@
     (setq metadata (concat metadata ghost-mode--metadata-suffix))
     metadata))
 
+(defun ghost-mode--get-metadata-as-hash-table (metadata)
+  "Get list of metadata as a hash table from a METADATA string."
+  (let* ((items (split-string metadata "\n"))
+	 (post (make-hash-table :test 'equal))
+	 (current-item nil))
+    (dolist (item items)
+      (setq current-item (split-string item ": "))
+
+      (if (and (> (length (car current-item)) 0)
+	       (member (intern (car current-item)) ghost-mode-default-metadata-fields))
+	  (puthash (car current-item) (cadr current-item) post)))
+    post))
+
 (defun ghost-mode--is-metadata-valid (metadata)
   "Validate METADATA."
   ;; TODO
@@ -179,18 +192,21 @@
 
 (defun ghost-mode--read-from-post-buffer ()
   "Read from current post buffer and transform It to hash-table."
-  (let* ((start (string-match "---\n" (buffer-string)))
-	 (end (string-match "\n---" (buffer-string)))
-	 (metadata (substring (buffer-string) (+ start (length "---\n")) end))
-	 (items (split-string metadata "\n"))
-	 (post (make-hash-table :test 'equal))
-	 (current-item nil))
-    (dolist (item items)
-      (setq current-item (split-string item ": "))
-
-      (if (and (> (length (car current-item)) 0)
-	       (member (intern (car current-item)) ghost-mode-default-metadata-fields))
-        (puthash (car current-item) (cadr current-item) post)))
+  (let* ((metadata-start (string-match ghost-mode--metadata-prefix (buffer-string)))
+	 (metadata-end (string-match ghost-mode--metadata-suffix (buffer-string)))
+	 (metadata
+	  (substring
+	   (buffer-string)
+	   (+ metadata-start (length ghost-mode--metadata-prefix))
+	   metadata-end))
+	 (markdown
+	  (substring
+	   (buffer-string)
+	   (+ metadata-end (length ghost-mode--metadata-suffix))
+	   (- (point-max) 1)))
+	 (post nil))
+    (setq post (ghost-mode--get-metadata-as-hash-table metadata))
+    (puthash "markdown" markdown post)
     post))
 
 (defun ghost-mode--show-post-action (button)

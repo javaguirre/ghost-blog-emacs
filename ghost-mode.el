@@ -48,7 +48,7 @@
 (defvar ghost-mode--create-post-message "Post created successfully!")
 (defvar
   ghost-mode--persist-post-failed
-  "Post persist failed, please check if your credentials well set")
+  "Post persist failed, please check if your credentials are well set")
 
 ;;;###autoload
 ;;; Commands

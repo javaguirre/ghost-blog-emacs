@@ -1,4 +1,5 @@
 ;;; ert.el --- Tests for Ghost mode
+;;; Commentary:
 
 ;;; Code:
 

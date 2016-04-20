@@ -69,10 +69,13 @@ Content-Encoding: gzip
 	 (post-hash (ghost-mode--read-from-post-buffer)))
     
     (puthash "title" "New title" expected-hash)
+    (puthash "markdown" "New post" expected-hash)
     (puthash "slug" "/new-title" expected-hash)
 
     (should
      (equal (gethash "title" expected-hash) (gethash "title" post-hash)))
+    (should
+     (equal (gethash "markdown" expected-hash) (gethash "markdown" post-hash)))
     (should
      (equal (gethash "slug" expected-hash) (gethash "slug" post-hash)))))
 

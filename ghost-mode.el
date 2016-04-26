@@ -147,11 +147,12 @@
   "Process post read callback, receive HTTP response STATUS."
   (ghost-mode--go-to-body)
 
-  (let ((posts (ghost-mode--get-response-posts)))
+  (let* ((posts (ghost-mode--get-response-posts))
+	 (current-post (aref posts 0)))
     (ghost-mode--use-ghost-post-buffer
      (format "%s%s"
-	     (ghost-mode--get-metadata-as-string)
-	     (gethash "markdown" (aref posts 0))))))
+	     (ghost-mode--get-metadata-as-string current-post)
+	     (gethash "markdown" current-post)))))
 
 ;; Metadata
 (defun ghost-mode--get-metadata-as-string ()

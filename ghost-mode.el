@@ -149,8 +149,8 @@
 
   (let ((posts (ghost-mode--get-response-posts)))
     (ghost-mode--use-ghost-post-buffer
-     (format "%s\n\n%s"
-	     (gethash "title" (aref posts 0))
+     (format "%s%s"
+	     (ghost-mode--get-metadata-as-string)
 	     (gethash "markdown" (aref posts 0))))))
 
 ;; Metadata

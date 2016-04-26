@@ -52,6 +52,7 @@
   ghost-mode--persist-post-failed
   "Post persist failed, please check if your credentials are well set")
 
+(defvar ghost-mode--date-format-string "%d-%m-%Y")
 ;;;###autoload
 ;;; Commands
 (defun ghost-mode-new-post ()
@@ -139,7 +140,8 @@
 
       (insert-text-button (format "%d %s - %s\n\n"
 				  (gethash "id" (aref posts i))
-				  (gethash "created_at" (aref posts i))
+				  (ghost-mode--format-date
+				   (gethash "created_at" (aref posts i)))
 				  (gethash "title" (aref posts i)))
 			  :type 'ghost-show-post-button))))
 
@@ -257,6 +259,12 @@
   "Check if the request has a successful http status."
   (let ((ghost-mode--http-ok "200"))
    (= (ghost-mode--get-http-status-code) ghost-mode--http-ok)))
+
+(defun ghost-mode--format-date (date)
+  "Get friendlier date format from DATE."
+  (format-time-string
+   ghost-mode--date-format-string
+   (date-to-time date)))
 
 ;; Endpoints
 

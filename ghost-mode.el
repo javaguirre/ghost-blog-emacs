@@ -32,7 +32,7 @@
   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
 (defvar ghost-mode--metadata-prefix "---\n\n")
 (defvar ghost-mode--metadata-suffix "\n---\n\n")
-(defvar ghost-mode--metadata-field-separator ":\n")
+(defvar ghost-mode--metadata-field-separator ": ")
 
 ;; Fields
 (defvar ghost-mode-default-metadata-fields
@@ -155,13 +155,21 @@
 	     (gethash "markdown" current-post)))))
 
 ;; Metadata
-(defun ghost-mode--get-metadata-as-string ()
-  "Get list of metadata as a string."
+(defun ghost-mode--get-metadata-as-string (post)
+  "Get list of POST metadata as a string."
   (let ((metadata ghost-mode--metadata-prefix))
-    (dolist (metadata_field ghost-mode-default-metadata-fields)
-      (setq metadata
-	    (concat metadata (symbol-name metadata_field)
-		    ghost-mode--metadata-field-separator)))
+    (dolist (metadata-field ghost-mode-default-metadata-fields)
+      (setq current-value (gethash (symbol-name metadata-field) post))
+
+      (if (not (stringp current-value))
+	  (setq current-value ""))
+
+    (setq metadata
+	(concat metadata
+		(symbol-name metadata-field)
+		ghost-mode--metadata-field-separator
+		current-value
+		"\n")))
     (setq metadata (concat metadata ghost-mode--metadata-suffix))
     metadata))
 

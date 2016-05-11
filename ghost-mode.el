@@ -3,14 +3,19 @@
 
 ;; Author: Javier Aguirre <hello@javaguirre.net>
 ;; Maintainer: Javier Aguirre <hello@javaguirre.net>
+;; Version: 0.1
+;; Package-Requires: ((markdown-mode "1.0"))
 ;; Created: 10 Feb 2016
 ;; Keywords: ghost, blog
-
-;; This file is not part of GNU Emacs.
+;; URL: https://github.com/javaguirre/ghost-mode
 
 ;;; Commentary:
 
 ;; This is a minor mode to manage Ghost blogs
+;; through their Rest API.Ghost Rest API only permits
+;; reading now.This package has the option of reading
+;; posts and openning them.Edit and create post is implemented
+;; but doesn't work until the Ghost team opens that part of the API
 
 ;;; Code:
 ;;

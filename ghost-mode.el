@@ -72,13 +72,14 @@
   (interactive)
 
   (let* ((json-object-type 'hash-table)
-	 (data (json-encode (ghost-mode--read-from-post-buffer))))
+	 (metadata (json-encode (ghost-mode--read-from-post-buffer)))
+	 (payload (json-encode metadata)))
     (if (ghost-mode--is-metadata-valid metadata)
         (ghost-mode--connection
          (ghost-mode--get-post-list-endpoint)
          'ghost-mode--create-post-callback
          "POST"
-         data)
+         payload)
       (message ghost-mode--invalid-metadata-message))))
 
 (defun ghost-mode-update-post ()

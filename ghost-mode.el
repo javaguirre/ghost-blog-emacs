@@ -165,7 +165,8 @@
 ;; Metadata
 (defun ghost-mode--get-metadata-as-string (post)
   "Get list of POST metadata as a string."
-  (let ((metadata ghost-mode--metadata-prefix))
+  (let ((metadata ghost-mode--metadata-prefix)
+	current-value)
     (dolist (metadata-field ghost-mode-default-metadata-fields)
       (setq current-value (gethash (symbol-name metadata-field) post))
 

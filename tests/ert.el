@@ -39,17 +39,6 @@ Content-Encoding: gzip
   (should
    (equal "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post" (buffer-string))))
 
-;; Advice
-(ert-deftest ghost-mode-get-posts ()
-  (let ((ghost-mode-url "http://javaguirre.net/ghost/api/v0.1")
-	(ghost-mode-bearer-token ""))
-    (ghost-mode-get-posts)
-    (sit-for 5)
-    (should
-     (equal
-      ghost-mode-http-authentication-warning-message
-      (ghost-mode-ert--last-message)))))
-
 ;; Metadata
 (ert-deftest ghost-mode-get-metadata-as-string ()
   (let* ((test-data (make-hash-table :test 'equal))

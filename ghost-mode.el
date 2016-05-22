@@ -46,8 +46,6 @@
   '(title markdown))
 
 ;; Messages
-(defvar ghost-mode-http-authentication-warning-message
-  "Authentication failed, you need to set ghost-mode-url and ghost-mode-bearer-token")
 (defvar
   ghost-mode--invalid-metadata-message
   "Error in metadata, you need to set the title")
@@ -101,12 +99,6 @@
   "Get posts from ghost."
   (interactive)
   (ghost-mode--connection ghost-mode-post-endpoint 'ghost-mode--get-posts-callback))
-
-;; Advice
-(defadvice url-http-handle-authentication (around ghost-mode-get-posts)
-  "Advice for url.el http authentication."
-  (message ghost-mode-http-authentication-warning-message))
-(ad-activate 'url-http-handle-authentication)
 
 (defun ghost-mode--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."

@@ -1,4 +1,4 @@
-;;; ghost-mode.el --- A mode to manage Ghost blog
+;;; ghost-blog.el --- A package to manage Ghost blog
 ;;
 
 ;; Author: Javier Aguirre <hello@javaguirre.net>
@@ -7,7 +7,7 @@
 ;; Package-Requires: ((markdown-mode "1.0"))
 ;; Created: 10 Feb 2016
 ;; Keywords: ghost, blog
-;; URL: https://github.com/javaguirre/ghost-mode
+;; URL: https://github.com/javaguirre/ghost-blog
 
 ;;; Commentary:
 
@@ -24,142 +24,142 @@
 (require 'markdown-mode)
 (eval-when-compile (require 'cl))
 
-(defvar ghost-mode-url nil)
-(defvar ghost-mode-bearer-token nil)
-(defvar ghost-mode-post-list-limit 10)
+(defvar ghost-blog-url nil)
+(defvar ghost-blog-bearer-token nil)
+(defvar ghost-blog-post-list-limit 10)
 
-(defvar ghost-mode-post-list-header-title "Ghost mode - Posts\n\n")
-(defvar ghost-mode-post-endpoint "/posts/")
-(defvar ghost-mode-buffer-post-name "ghost-post.md")
+(defvar ghost-blog-post-list-header-title "Ghost mode - Posts\n\n")
+(defvar ghost-blog-post-endpoint "/posts/")
+(defvar ghost-blog-buffer-post-name "ghost-post.md")
 
 ;; Metadata
-(defvar ghost-mode-metadata-default-header-string
+(defvar ghost-blog-metadata-default-header-string
   "---\n\ntitle: New title\nslug: /new-title\n\n---\n\nNew post")
-(defvar ghost-mode--metadata-prefix "---\n\n")
-(defvar ghost-mode--metadata-suffix "\n---\n\n")
-(defvar ghost-mode--metadata-field-separator ": ")
+(defvar ghost-blog--metadata-prefix "---\n\n")
+(defvar ghost-blog--metadata-suffix "\n---\n\n")
+(defvar ghost-blog--metadata-field-separator ": ")
 
 ;; Fields
-(defvar ghost-mode-default-metadata-fields
+(defvar ghost-blog-default-metadata-fields
   '(title slug status image featured page language meta_title meta_description))
-(defvar ghost-mode-required-metadata-fields
+(defvar ghost-blog-required-metadata-fields
   '(title markdown))
 
 ;; Messages
 (defvar
-  ghost-mode--invalid-metadata-message
+  ghost-blog--invalid-metadata-message
   "Error in metadata, you need to set the title")
-(defvar ghost-mode--update-post-message "Post updated successfully!")
-(defvar ghost-mode--create-post-message "Post created successfully!")
+(defvar ghost-blog--update-post-message "Post updated successfully!")
+(defvar ghost-blog--create-post-message "Post created successfully!")
 (defvar
-  ghost-mode--persist-post-failed
+  ghost-blog--persist-post-failed
   "Post persist failed, please check if your credentials are well set")
 
-(defvar ghost-mode--date-format-string "%d-%m-%Y")
+(defvar ghost-blog--date-format-string "%d-%m-%Y")
 ;;;###autoload
 ;;; Commands
-(defun ghost-mode-new-post ()
+(defun ghost-blog-new-post ()
   "Create new post template."
   (interactive)
 
-  (ghost-mode--use-ghost-post-buffer
-   ghost-mode-metadata-default-header-string))
+  (ghost-blog--use-ghost-post-buffer
+   ghost-blog-metadata-default-header-string))
 
-(defun ghost-mode-save-new-post ()
+(defun ghost-blog-save-new-post ()
   "Create new post."
   (interactive)
 
   (let* ((json-object-type 'hash-table)
-	 (metadata (json-encode (ghost-mode--read-from-post-buffer)))
+	 (metadata (json-encode (ghost-blog--read-from-post-buffer)))
 	 (payload (json-encode metadata)))
-    (if (ghost-mode--is-metadata-valid metadata)
-        (ghost-mode--connection
-         (ghost-mode--get-post-list-endpoint)
-         'ghost-mode--create-post-callback
+    (if (ghost-blog--is-metadata-valid metadata)
+        (ghost-blog--connection
+         (ghost-blog--get-post-list-endpoint)
+         'ghost-blog--create-post-callback
          "POST"
          payload)
-      (message ghost-mode--invalid-metadata-message))))
+      (message ghost-blog--invalid-metadata-message))))
 
-(defun ghost-mode-update-post ()
+(defun ghost-blog-update-post ()
   "Update a post."
   (interactive)
 
   (let* ((json-object-type 'hash-table)
-	 (metadata (ghost-mode--read-from-post-buffer))
+	 (metadata (ghost-blog--read-from-post-buffer))
 	 (payload (json-encode metadata)))
-    (if (ghost-mode--is-metadata-valid metadata)
-	(ghost-mode--connection
-	 (concat ghost-mode-post-endpoint (gethash "id" metadata))
-	 'ghost-mode--update-post-callback
+    (if (ghost-blog--is-metadata-valid metadata)
+	(ghost-blog--connection
+	 (concat ghost-blog-post-endpoint (gethash "id" metadata))
+	 'ghost-blog--update-post-callback
 	 "PUT"
 	 payload)
-      (message ghost-mode--invalid-metadata-message))))
+      (message ghost-blog--invalid-metadata-message))))
 
-(defun ghost-mode-get-posts ()
+(defun ghost-blog-get-posts ()
   "Get posts from ghost."
   (interactive)
-  (ghost-mode--connection ghost-mode-post-endpoint 'ghost-mode--get-posts-callback))
+  (ghost-blog--connection ghost-blog-post-endpoint 'ghost-blog--get-posts-callback))
 
-(defun ghost-mode--connection (endpoint callback &optional method data)
+(defun ghost-blog--connection (endpoint callback &optional method data)
   "HTTP Connection with Ghost API using ENDPOINT, execute CALLBACK.  METHOD and DATA can be set."
   (let ((url-request-method (or method "GET"))
 	(url-request-extra-headers
-	 `(("Authorization" . ,ghost-mode-bearer-token))))
-    (url-retrieve (concat ghost-mode-url endpoint) callback)))
+	 `(("Authorization" . ,ghost-blog-bearer-token))))
+    (url-retrieve (concat ghost-blog-url endpoint) callback)))
 
 ;; Callbacks
-(defun ghost-mode--create-post-callback (status)
+(defun ghost-blog--create-post-callback (status)
   "Process post creation, receive HTTP response STATUS."
-  (if (ghost-mode--is-request-successful)
-      (message ghost-mode--create-post-message)
-    (message ghost-mode--persist-post-failed)))
+  (if (ghost-blog--is-request-successful)
+      (message ghost-blog--create-post-message)
+    (message ghost-blog--persist-post-failed)))
 
-(defun ghost-mode--update-post-callback (status)
+(defun ghost-blog--update-post-callback (status)
   "Process post update, receive HTTP response STATUS."
-  (if (ghost-mode--is-request-successful)
-      (message ghost-mode--update-post-message)
-    (message ghost-mode--persist-post-failed)))
+  (if (ghost-blog--is-request-successful)
+      (message ghost-blog--update-post-message)
+    (message ghost-blog--persist-post-failed)))
 
-(defun ghost-mode--get-posts-callback (status)
+(defun ghost-blog--get-posts-callback (status)
   "Process post list callback, receive HTTP response STATUS."
-  (ghost-mode--go-to-body)
+  (ghost-blog--go-to-body)
 
-  (let ((posts (ghost-mode--get-response-posts)))
+  (let ((posts (ghost-blog--get-response-posts)))
     (define-button-type 'ghost-show-post-button
-      'action 'ghost-mode--show-post-action
+      'action 'ghost-blog--show-post-action
       'follow-link t
       'help-echo "Show post")
 
     (erase-buffer)
 
-    (insert ghost-mode-post-list-header-title)
+    (insert ghost-blog-post-list-header-title)
 
     (dotimes (i (length posts))
 
       (insert-text-button (format "%d %s - %s\n\n"
 				  (gethash "id" (aref posts i))
-				  (ghost-mode--format-date
+				  (ghost-blog--format-date
 				   (gethash "created_at" (aref posts i)))
 				  (gethash "title" (aref posts i)))
 			  :type 'ghost-show-post-button))))
 
-(defun ghost-mode--get-post-callback (status)
+(defun ghost-blog--get-post-callback (status)
   "Process post read callback, receive HTTP response STATUS."
-  (ghost-mode--go-to-body)
+  (ghost-blog--go-to-body)
 
-  (let* ((posts (ghost-mode--get-response-posts))
+  (let* ((posts (ghost-blog--get-response-posts))
 	 (current-post (aref posts 0)))
-    (ghost-mode--use-ghost-post-buffer
+    (ghost-blog--use-ghost-post-buffer
      (format "%s%s"
-	     (ghost-mode--get-metadata-as-string current-post)
+	     (ghost-blog--get-metadata-as-string current-post)
 	     (gethash "markdown" current-post)))))
 
 ;; Metadata
-(defun ghost-mode--get-metadata-as-string (post)
+(defun ghost-blog--get-metadata-as-string (post)
   "Get list of POST metadata as a string."
-  (let ((metadata ghost-mode--metadata-prefix)
+  (let ((metadata ghost-blog--metadata-prefix)
 	current-value)
-    (dolist (metadata-field ghost-mode-default-metadata-fields)
+    (dolist (metadata-field ghost-blog-default-metadata-fields)
       (setq current-value (gethash (symbol-name metadata-field) post))
 
       (if (not (stringp current-value))
@@ -168,13 +168,13 @@
     (setq metadata
 	(concat metadata
 		(symbol-name metadata-field)
-		ghost-mode--metadata-field-separator
+		ghost-blog--metadata-field-separator
 		current-value
 		"\n")))
-    (setq metadata (concat metadata ghost-mode--metadata-suffix))
+    (setq metadata (concat metadata ghost-blog--metadata-suffix))
     metadata))
 
-(defun ghost-mode--get-metadata-as-hash-table (metadata)
+(defun ghost-blog--get-metadata-as-hash-table (metadata)
   "Get list of metadata as a hash table from a METADATA string."
   (let* ((items (split-string metadata "\n"))
 	 (post (make-hash-table :test 'equal))
@@ -183,54 +183,54 @@
       (setq current-item (split-string item ": "))
 
       (if (and (> (length (car current-item)) 0)
-	       (member (intern (car current-item)) ghost-mode-default-metadata-fields))
+	       (member (intern (car current-item)) ghost-blog-default-metadata-fields))
 	  (puthash (car current-item) (cadr current-item) post)))
     post))
 
-(defun ghost-mode--is-metadata-valid (metadata)
+(defun ghost-blog--is-metadata-valid (metadata)
   "Validate METADATA."
   (let ((is-valid t))
-    (dolist (required-metadata-field ghost-mode-required-metadata-fields)
+    (dolist (required-metadata-field ghost-blog-required-metadata-fields)
       (unless (gethash (symbol-name required-metadata-field) metadata)
 	(setq is-valid nil)))
     is-valid))
 
 ;; Utils
-(defun ghost-mode--use-ghost-post-buffer (buffer-data)
+(defun ghost-blog--use-ghost-post-buffer (buffer-data)
   "Use ghost post buffer and insert BUFFER-DATA on It."
-  (let ((post-buffer ghost-mode-buffer-post-name))
+  (let ((post-buffer ghost-blog-buffer-post-name))
     (get-buffer-create post-buffer)
     (switch-to-buffer post-buffer)
     (erase-buffer)
     (insert buffer-data)
     (markdown-mode)))
 
-(defun ghost-mode--read-from-post-buffer ()
+(defun ghost-blog--read-from-post-buffer ()
   "Read from current post buffer and transform It to hash-table."
-  (let* ((metadata-start (string-match ghost-mode--metadata-prefix (buffer-string)))
-	 (metadata-end (string-match ghost-mode--metadata-suffix (buffer-string)))
+  (let* ((metadata-start (string-match ghost-blog--metadata-prefix (buffer-string)))
+	 (metadata-end (string-match ghost-blog--metadata-suffix (buffer-string)))
 	 (metadata
 	  (substring
 	   (buffer-string)
-	   (+ metadata-start (length ghost-mode--metadata-prefix))
+	   (+ metadata-start (length ghost-blog--metadata-prefix))
 	   metadata-end))
 	 (markdown
 	  (substring
 	   (buffer-string)
-	   (+ metadata-end (length ghost-mode--metadata-suffix))
+	   (+ metadata-end (length ghost-blog--metadata-suffix))
 	   (- (point-max) 1)))
 	 (post nil))
-    (setq post (ghost-mode--get-metadata-as-hash-table metadata))
+    (setq post (ghost-blog--get-metadata-as-hash-table metadata))
     (puthash "markdown" markdown post)
     post))
 
-(defun ghost-mode--show-post-action (button)
+(defun ghost-blog--show-post-action (button)
   "Show a post by id from BUTTON."
   (let* ((id (car (split-string (button-label button))))
 	 (endpoint (concat "/posts/" id)))
-    (ghost-mode--connection endpoint 'ghost-mode--get-post-callback)))
+    (ghost-blog--connection endpoint 'ghost-blog--get-post-callback)))
 
-(defun ghost-mode--get-http-status-code ()
+(defun ghost-blog--get-http-status-code ()
   "Get the HTTP status of the current request."
   (switch-to-buffer (current-buffer))
 
@@ -238,40 +238,40 @@
 	 (start-point (re-search-forward "\\s-")))
 	 (buffer-substring start-point (+ start-point http-status-length))))
 
-(defun ghost-mode--go-to-body ()
+(defun ghost-blog--go-to-body ()
   "Go to HTTP response body."
   (switch-to-buffer (current-buffer))
   (search-forward "\n\n")
   (delete-region (point-min) (point)))
 
-(defun ghost-mode--get-response-posts ()
+(defun ghost-blog--get-response-posts ()
   "Get posts from HTTP response body."
-  (let ((body (ghost-mode--get-response-body)))
+  (let ((body (ghost-blog--get-response-body)))
     (gethash "posts" body)))
 
-(defun ghost-mode--get-response-body ()
+(defun ghost-blog--get-response-body ()
   "Get HTTP response body json decoded."
   (let ((json-object-type 'hash-table))
     (json-read-from-string (buffer-string))))
 
-(defun ghost-mode--is-request-successful ()
+(defun ghost-blog--is-request-successful ()
   "Check if the request has a successful http status."
-  (let ((ghost-mode--http-ok "200"))
-   (= (ghost-mode--get-http-status-code) ghost-mode--http-ok)))
+  (let ((ghost-blog--http-ok "200"))
+   (= (ghost-blog--get-http-status-code) ghost-blog--http-ok)))
 
-(defun ghost-mode--format-date (date)
+(defun ghost-blog--format-date (date)
   "Get friendlier date format from DATE."
   (format-time-string
-   ghost-mode--date-format-string
+   ghost-blog--date-format-string
    (date-to-time date)))
 
 ;; Endpoints
 
-(defun ghost-mode--get-post-list-endpoint ()
+(defun ghost-blog--get-post-list-endpoint ()
   "Get the post list endpoint."
-  (let ((limit (or ghost-mode-post-list-limit "")))
+  (let ((limit (or ghost-blog-post-list-limit "")))
     (if limit (setq limit (format "?limit=%d" limit)))
-    (concat ghost-mode-post-endpoint limit)))
+    (concat ghost-blog-post-endpoint limit)))
 
-(provide 'ghost-mode)
-;;; ghost-mode.el ends here
+(provide 'ghost-blog)
+;;; ghost-blog.el ends here

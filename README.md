@@ -1,6 +1,6 @@
 # Ghost mode for Emacs
 
-[![Build Status](https://travis-ci.org/javaguirre/ghost-mode.svg?branch=master)](https://travis-ci.org/javaguirre/ghost-mode)
+[![Build Status](https://travis-ci.org/javaguirre/ghost-blog.svg?branch=master)](https://travis-ci.org/javaguirre/ghost-blog)
 
 ## Requirement
 
@@ -21,8 +21,8 @@ You need to set up this variables for the package to work.
 There is not Oauth for now, [you need to get a Bearer token](http://api.ghost.org/docs/client-authentication).
 
 ```elisp
-(setq ghost-mode-url "https://javaguirre.net/ghost/api/v0.1")
-(setq ghost-mode-bearer-token "Bearer my bearer"
+(setq ghost-blog-url "https://javaguirre.net/ghost/api/v0.1")
+(setq ghost-blog-bearer-token "Bearer my bearer"
 ```
 
 ### Commands
@@ -32,7 +32,7 @@ There is not Oauth for now, [you need to get a Bearer token](http://api.ghost.or
 Shows a clickable list of the last posts of your blog.
 
 ```elisp
-(ghost-mode-get-posts)
+(ghost-blog-get-posts)
 ```
 
 #### Create new post template
@@ -40,7 +40,7 @@ Shows a clickable list of the last posts of your blog.
 It will create a new buffer with a default post template.
 
 ```elisp
-(ghost-mode-new-post)
+(ghost-blog-new-post)
 ```
 
 #### Create post
@@ -49,7 +49,7 @@ It will create a post based on the information
 in the current buffer.
 
 ```elisp
-(ghost-mode-save-new-post)
+(ghost-blog-save-new-post)
 ```
 
 #### Update a post
@@ -60,7 +60,7 @@ buffer, you could call this command to update the
 current post.
 
 ```elisp
-(ghost-mode-update-post)
+(ghost-blog-update-post)
 ```
 
 ## Run unittests
@@ -70,7 +70,7 @@ We use ERT to run the unittests.
 In the root of the project.
 
 ```bash
-emacs -batch -l ert -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
+emacs -batch -l ert -l ghost-blog.el -l tests/ert.el -f ert-run-tests-batch-and-exit
 ```
 
 or

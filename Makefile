@@ -17,4 +17,4 @@ TEST_DEP_1_LATEST_URL=http://git.savannah.gnu.org/cgit/emacs.git/plain/lisp/emac
 .PHONY : test
 
 test:
-	$(EMACS) $(EMACS_BATCH) -l ert -l markdown-mode.el -l ghost-mode.el -l tests/ert.el -f ert-run-tests-batch-and-exit
+	$(EMACS) $(EMACS_BATCH) -l ert -l markdown-mode.el -l ghost-blog.el -l tests/ert.el -f ert-run-tests-batch-and-exit

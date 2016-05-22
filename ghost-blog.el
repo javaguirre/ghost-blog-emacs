@@ -24,9 +24,13 @@
 (require 'markdown-mode)
 (eval-when-compile (require 'cl))
 
-(defvar ghost-blog-url nil)
-(defvar ghost-blog-bearer-token nil)
-(defvar ghost-blog-post-list-limit 10)
+;; User options
+(defcustom ghost-blog-url nil
+  "Ghost blog api url.")
+(defcustom ghost-blog-bearer-token nil
+  "Ghost bearer token for authentication.")
+(defcustom ghost-blog-post-list-limit 10
+  "Ghost post list limit.")
 
 (defvar ghost-blog-post-list-header-title "Ghost mode - Posts\n\n")
 (defvar ghost-blog-post-endpoint "/posts/")

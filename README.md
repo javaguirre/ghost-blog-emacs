@@ -1,6 +1,6 @@
-# Ghost mode for Emacs
+# Ghost blog package for Emacs
 
-[![Build Status](https://travis-ci.org/javaguirre/ghost-blog.svg?branch=master)](https://travis-ci.org/javaguirre/ghost-blog)
+[![Build Status](https://travis-ci.org/javaguirre/ghost-blog-emacs.svg?branch=master)](https://travis-ci.org/javaguirre/ghost-blog-emacs)
 
 ## Requirement
 

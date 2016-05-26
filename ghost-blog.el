@@ -24,13 +24,20 @@
 (require 'markdown-mode)
 (eval-when-compile (require 'cl))
 
+(defgroup ghost-blog nil
+  "Customization group for `ghost-blog.el'."
+  :group 'tools)
+
 ;; User options
 (defcustom ghost-blog-url nil
-  "Ghost blog api url.")
+  "Ghost blog api url."
+  :group 'ghost-blog)
 (defcustom ghost-blog-bearer-token nil
-  "Ghost bearer token for authentication.")
+  "Ghost bearer token for authentication."
+  :group 'ghost-blog)
 (defcustom ghost-blog-post-list-limit 10
-  "Ghost post list limit.")
+  "Ghost post list limit."
+  :group 'ghost-blog)
 
 (defvar ghost-blog-post-list-header-title "Ghost mode - Posts\n\n")
 (defvar ghost-blog-post-endpoint "/posts/")

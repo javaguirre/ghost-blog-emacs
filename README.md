@@ -9,7 +9,7 @@ The package uses `markdown-mode` for highlighting.
 ## Installation
 
 ```
-M-x package-install ghost
+M-x package-install ghost-blog
 ```
 
 ## Usage

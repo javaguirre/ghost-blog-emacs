@@ -22,7 +22,7 @@ There is not Oauth for now, [you need to get a Bearer token](http://api.ghost.or
 
 ```elisp
 (setq ghost-blog-url "https://javaguirre.net/ghost/api/v0.1")
-(setq ghost-blog-bearer-token "Bearer my bearer"
+(setq ghost-blog-bearer-token "Bearer my bearer")
 ```
 
 ### Commands

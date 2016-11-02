@@ -22,7 +22,6 @@
 (require 'url)
 (require 'json)
 (require 'markdown-mode)
-(eval-when-compile (require 'cl))
 
 ;; User options
 (defcustom ghost-blog-url nil
